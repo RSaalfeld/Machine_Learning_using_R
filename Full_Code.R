@@ -106,7 +106,7 @@ map_pokemon <- function(dim1,dim2,rank,title='MAP',selec=NULL,pokenames) {
   p<-p+geom_point(aes(x=dim1,y=dim2,fill=rank),
                   shape=21,alpha=0.5,size=3,colour='black')
   #highlight selected points
-  p<-p+geom_text(aes(x=dim1[selec]+0.5,y=dim2[selec]+0.5),
+  p<-p+geom_text(aes(x=dim1[selec],y=dim2[selec]+0.5),
                  label=pokenames[selec],size=4,fontface = "bold")+
     geom_point(aes(x=dim1[selec],y=dim2[selec]),
                size = 5, alpha = 1,na.rm = T, shape = 21, colour = "black")
@@ -145,7 +145,11 @@ ggplot(data = imps,
                      axis.text.x = element_text(angle=90,size=14))
 
 selec<-c(1,2,3,4,5,6,7,8,9,10,25,129,147,148,149,150,151)
+
+#select the two most important features according to random forest
 pokemon.vars<-pokemon[results$optVariables[c(1,2)]]
+#use them to map pokémon data
+map_pokemon(pokemon.vars[,1],pokemon.vars[,2],rank,'Selected',selec,pokenames)
 
 
 # Dimensionality reduction ------------------------------------------------
