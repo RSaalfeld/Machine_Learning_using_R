@@ -14,9 +14,12 @@ library(gridExtra)
 
 
 # Data preparation --------------------------------------------------------
+#Assuming the dataset is in your work directory
 df_poke<-read.csv('pokemon.csv')
 summary(df_poke)
 
+#Correcting values for pokémon with missing height and weight data
+#These values are obtained from Bulbapedia
 df_poke$height_m[df_poke$name=='Rattata']<-0.3
 df_poke$height_m[df_poke$name=='Raticate']<-0.7
 df_poke$height_m[df_poke$name=='Raichu']<-0.7
@@ -59,10 +62,12 @@ df_poke$weight_kg[df_poke$name=='Marowak']<-45.0
 df_poke$weight_kg[df_poke$name=='Hoopa']<-9.0
 df_poke$weight_kg[df_poke$name=='Lycanroc']<-25.0
 
+#Capture rate correction for Minior
 df_poke$capture_rate<-as.numeric(df_poke$capture_rate)
 df_poke$capture_rate[is.na(df_poke$capture_rate)]<-30
 df_poke$percentage_male[is.na(df_poke$percentage_male)]<-0
 
+#Definition of Rank variable
 rank <- c(1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,1,2,1,2,2,3,1,2,1,2,3,1,2,3,2,3,1,
           2,2,3,1,2,1,2,3,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,1,2,3,1,2,3,1,2,3,1,2,1,
           2,3,1,2,1,2,1,2,1,1,2,1,2,1,2,1,2,1,2,3,1,1,2,1,2,1,2,1,2,1,2,2,2,1,1,2,1,
@@ -95,11 +100,10 @@ levels(rank)<-c('Rank 1', 'Rank 2', 'Rank 3', 'Legendary')
 pokemon<-data.frame(id=df_poke$pokedex_number,
                     scale(df_poke[,c('attack','defense','speed','sp_attack',
                                      'sp_defense','hp')]))
-
-
 pokenames<-df_poke$name
 
-
+#Selection of pokémon to take a closer look during mapping
+selec<-c(1,2,3,4,5,6,7,8,9,10,25,129,147,148,149,150,151)
 
 # function for 2d map plotting --------------------------------------------
 map_pokemon <- function(dim1,dim2,rank,title='MAP',selec=NULL,pokenames) {
@@ -146,8 +150,6 @@ ggplot(data = imps,
   geom_text(aes(label = round(imp, 1)), vjust=2, color="white", size=6) + 
   theme_bw() + theme(text = element_text(size=18),legend.position = "none",
                      axis.text.x = element_text(angle=90,size=14))
-
-selec<-c(1,2,3,4,5,6,7,8,9,10,25,129,147,148,149,150,151)
 
 #select the two most important features according to random forest
 pokemon.vars<-pokemon[results$optVariables[c(1,2)]]
