@@ -1,3 +1,6 @@
+#Dimensionality reduction of Pokémon Data!
+#The dataset may be downloaded here: https://www.kaggle.com/rounakbanik/pokemon
+
 # Import section ----------------------------------------------------------
 
 
